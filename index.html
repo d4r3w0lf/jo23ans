@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joyeux Anniversaire Jo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
+
+  body {
+    background: #1a1a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Press Start 2P', monospace;
+  }
+
+  .card {
+    width: 800px;
+    min-height: 1100px;
+    background: #0d0d1a;
+    border: 4px solid #ffd700;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 0 4px #0d0d1a, 0 0 0 8px #ffd700, 0 0 60px rgba(255,215,0,0.2);
+  }
+
+  /* Stars background */
+  .stars {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image:
+      radial-gradient(1px 1px at 10% 5%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 20% 15%, #aaa 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 8%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 12%, #aaa 0%, transparent 100%),
+      radial-gradient(1px 1px at 65% 3%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 18%, #aaa 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 7%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 25%, #aaa 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 22%, #fff 0%, transparent 100%),
+      radial-gradient(2px 2px at 45% 2%, #ffd700 0%, transparent 100%),
+      radial-gradient(2px 2px at 85% 10%, #ffd700 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  /* Header band */
+  .header-band {
+    background: #1a0a3e;
+    border-bottom: 4px solid #ffd700;
+    padding: 12px 0 0;
+    text-align: center;
+    position: relative;
+  }
+
+  /* Pixel art moon + title logo */
+  .moonforge-logo {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .title-main {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: #ffd700;
+    text-shadow: 2px 2px #b8860b, 0 0 20px rgba(255,215,0,0.5);
+    letter-spacing: 2px;
+    line-height: 1.8;
+  }
+
+  .title-sub {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #c084fc;
+    letter-spacing: 3px;
+    padding-bottom: 10px;
+  }
+
+  /* Pixel scene */
+  .pixel-scene {
+    position: relative;
+    height: 220px;
+    background: linear-gradient(to bottom, #0a0520 0%, #1a0a3e 40%, #2d1b00 70%, #1a0d00 100%);
+    overflow: hidden;
+  }
+
+  /* Mountains pixel art */
+  .mountains {
+    position: absolute;
+    bottom: 40px; left: 0; right: 0;
+    height: 100px;
+  }
+
+  /* Ground */
+  .ground {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 40px;
+    background: #2d4a1e;
+    border-top: 4px solid #3d6a28;
+  }
+
+  .ground::before {
+    content: '';
+    position: absolute; top: -8px; left: 0; right: 0; height: 8px;
+    background: repeating-linear-gradient(90deg, #3d6a28 0px, #3d6a28 8px, #4a7a30 8px, #4a7a30 16px);
+  }
+
+  /* Pixel trees */
+  .tree { position: absolute; bottom: 40px; }
+  .tree-trunk { width: 8px; height: 16px; background: #6b3a1f; margin: 0 auto; }
+  .tree-top { width: 24px; height: 32px; background: #2d5a1e; margin: 0 auto;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+  .tree-top2 { width: 32px; height: 24px; background: #3d7a28; margin: -8px auto 0;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+
+  /* Pixel castle/dungeon */
+  .dungeon {
+    position: absolute; bottom: 40px; right: 80px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .dungeon-tower { width: 48px; height: 64px; background: #3a2060; border: 4px solid #6a40a0; position: relative; }
+  .dungeon-battlements {
+    position: absolute; top: -12px; left: -4px; right: -4px;
+    display: flex; gap: 4px;
+  }
+  .battlement { width: 12px; height: 12px; background: #3a2060; border: 4px solid #6a40a0; }
+  .dungeon-window { width: 12px; height: 16px; background: #ffd700; margin: 12px auto 0;
+    box-shadow: 0 0 8px #ffd700; }
+  .dungeon-door { width: 20px; height: 28px; background: #1a0a3e; margin: 0 auto;
+    border-radius: 50% 50% 0 0; border: 4px solid #6a40a0; }
+
+  /* Pixel hero character */
+  .hero {
+    position: absolute; bottom: 40px; left: 120px;
+  }
+
+  /* Pixel crystal/nexus */
+  .nexus {
+    position: absolute; bottom: 52px; left: 50%; transform: translateX(-50%);
+    width: 20px; height: 28px;
+    background: #00ffff;
+    clip-path: polygon(50% 0%, 100% 40%, 75% 100%, 25% 100%, 0% 40%);
+    box-shadow: 0 0 20px #00ffff, 0 0 40px rgba(0,255,255,0.4);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 15px #00ffff, 0 0 30px rgba(0,255,255,0.4); transform: translateX(-50%) scale(1); }
+    50% { box-shadow: 0 0 25px #00ffff, 0 0 60px rgba(0,255,255,0.6); transform: translateX(-50%) scale(1.05); }
+  }
+
+  /* Floating coins */
+  .coin {
+    position: absolute;
+    width: 12px; height: 12px;
+    background: #ffd700;
+    border-radius: 50%;
+    border: 2px solid #b8860b;
+    animation: float 3s ease-in-out infinite;
+  }
+  .coin:nth-child(1) { top: 30px; left: 30%; animation-delay: 0s; }
+  .coin:nth-child(2) { top: 20px; left: 60%; animation-delay: 0.5s; }
+  .coin:nth-child(3) { top: 45px; left: 75%; animation-delay: 1s; }
+  .coin:nth-child(4) { top: 15px; left: 45%; animation-delay: 1.5s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* HUD bar */
+  .hud-bar {
+    background: #0d0d1a;
+    border-bottom: 4px solid #ffd700;
+    border-top: 4px solid #ffd700;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .hud-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 7px; color: #aaa;
+  }
+
+  .hud-label { color: #ffd700; font-size: 6px; }
+
+  .hp-bar { width: 60px; height: 10px; background: #333; border: 2px solid #666; }
+  .hp-fill { height: 100%; background: #22c55e; width: 80%; }
+
+  .xp-bar { width: 60px; height: 10px; background: #333; border: 2px solid #666; }
+  .xp-fill { height: 100%; background: #a855f7; width: 65%; }
+
+  .badge {
+    background: #ffd700; color: #0d0d1a;
+    font-size: 6px; padding: 4px 8px;
+    border: 2px solid #b8860b;
+  }
+
+  /* Main text zone */
+  .text-zone {
+    padding: 30px 40px;
+    position: relative;
+    background: #0d0d1a;
+  }
+
+  .text-zone::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(255,215,0,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,215,0,0.02) 1px, transparent 1px);
+    background-size: 16px 16px;
+    pointer-events: none;
+  }
+
+  .greeting {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    color: #ffd700;
+    text-shadow: 3px 3px #b8860b;
+    margin-bottom: 28px;
+    text-align: center;
+    animation: blink-cursor 1s step-end infinite;
+  }
+
+  .text-body {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: #e8e8c8;
+    line-height: 1.9;
+    position: relative;
+    z-index: 1;
+  }
+
+  .text-body p {
+    margin-bottom: 18px;
+    padding-left: 8px;
+    border-left: 3px solid #2a2a4a;
+  }
+
+  .text-body .highlight {
+    color: #ffd700;
+    text-shadow: 0 0 8px rgba(255,215,0,0.5);
+  }
+
+  .text-body .cyan { color: #00ffff; }
+  .text-body .purple { color: #c084fc; }
+  .text-body .green { color: #4ade80; }
+
+  /* Dialogue box style for last line */
+  .dialogue-box {
+    border: 3px solid #ffd700;
+    padding: 14px 18px;
+    margin-top: 20px;
+    position: relative;
+    background: #0a0a18;
+  }
+
+  .dialogue-box::before {
+    content: '▶';
+    position: absolute; bottom: -22px; left: 20px;
+    font-size: 14px; color: #ffd700;
+    animation: blink-cursor 0.8s step-end infinite;
+  }
+
+  .dialogue-speaker {
+    font-size: 7px; color: #ffd700;
+    margin-bottom: 8px; letter-spacing: 2px;
+  }
+
+  .dialogue-text {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: #e8e8c8;
+    line-height: 1.6;
+  }
+
+  @keyframes blink-cursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* Bottom pixel scene strip */
+  .bottom-strip {
+    background: #1a0a3e;
+    border-top: 4px solid #ffd700;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .game-name {
+    font-size: 7px;
+    color: #c084fc;
+    letter-spacing: 1px;
+    line-height: 1.8;
+  }
+
+  .game-name span { color: #ffd700; display: block; font-size: 9px; margin-bottom: 2px; }
+
+  .age-badge {
+    font-size: 11px;
+    color: #ffd700;
+    text-shadow: 2px 2px #b8860b;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .age-badge .num { font-size: 28px; color: #ffd700; display: block; line-height: 1; }
+
+  /* Pixel art SVG elements */
+  .pixel-border-top {
+    display: flex; justify-content: center; gap: 0;
+    padding: 6px 0;
+    overflow: hidden;
+  }
+
+  .pb { width: 16px; height: 12px; }
+  .pb-gold { background: #ffd700; }
+  .pb-dark { background: #0d0d1a; }
+  .pb-gem { background: #a855f7; }
+  .pb-cyan { background: #00ffff; }
+
+  /* Items row */
+  .items-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 20px;
+    padding: 12px;
+    border-top: 3px solid #2a2a4a;
+    flex-wrap: wrap;
+  }
+
+  .item-slot {
+    width: 40px; height: 40px;
+    border: 3px solid #6a40a0;
+    background: #1a0a3e;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    position: relative;
+  }
+
+  .item-slot .item-label {
+    position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%);
+    font-size: 5px; color: #888; white-space: nowrap;
+  }
+
+  .item-slot.rare { border-color: #ffd700; }
+  .item-slot.epic { border-color: #a855f7; box-shadow: 0 0 8px rgba(168,85,247,0.4); }
+
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="stars"></div>
+
+  <!-- Header -->
+  <div class="header-band">
+    <div class="moonforge-logo">
+      <svg width="32" height="32" viewBox="0 0 16 16">
+        <rect x="4" y="0" width="8" height="2" fill="#ffd700"/>
+        <rect x="2" y="2" width="12" height="2" fill="#ffd700"/>
+        <rect x="0" y="4" width="16" height="6" fill="#ffd700"/>
+        <rect x="2" y="10" width="12" height="2" fill="#b8860b"/>
+        <rect x="6" y="12" width="4" height="4" fill="#b8860b"/>
+        <rect x="5" y="6" width="2" height="2" fill="#0d0d1a"/>
+        <rect x="9" y="6" width="2" height="2" fill="#0d0d1a"/>
+      </svg>
+      <div>
+        <div class="title-main">PIXEL CHRONICLES</div>
+        <div class="title-sub">by MoonForge ✦ Online RPG</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pixel scene -->
+  <div class="pixel-scene">
+    <!-- Floating coins -->
+    <div class="coin"></div>
+    <div class="coin"></div>
+    <div class="coin"></div>
+    <div class="coin"></div>
+
+    <!-- SVG pixel art scene -->
+    <svg width="800" height="220" viewBox="0 0 800 220" style="position:absolute;top:0;left:0;">
+      <!-- Sky gradient layer -->
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#050215"/>
+          <stop offset="100%" stop-color="#1a0a3e"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Moon -->
+      <rect x="60" y="20" width="40" height="40" fill="#fffacd"/>
+      <rect x="64" y="16" width="32" height="8" fill="#fffacd"/>
+      <rect x="56" y="24" width="8" height="24" fill="#fffacd"/>
+      <rect x="96" y="24" width="8" height="24" fill="#fffacd"/>
+      <rect x="64" y="56" width="32" height="8" fill="#fffacd"/>
+      <!-- Moon craters -->
+      <rect x="72" y="28" width="4" height="4" fill="#e8e0a0"/>
+      <rect x="82" y="38" width="6" height="4" fill="#e8e0a0"/>
+
+      <!-- Mountain 1 (back) -->
+      <polygon points="0,180 80,80 160,180" fill="#1a0a3e"/>
+      <polygon points="80,80 100,100 60,100" fill="#2a1a5e"/>
+      <!-- Mountain 2 -->
+      <polygon points="100,180 220,60 340,180" fill="#1a0a3e"/>
+      <polygon points="220,60 250,90 190,90" fill="#2a1a5e"/>
+      <!-- Mountain 3 (right) -->
+      <polygon points="500,180 640,50 780,180" fill="#1a0a3e"/>
+      <polygon points="640,50 670,85 610,85" fill="#2a1a5e"/>
+
+      <!-- Ground -->
+      <rect x="0" y="178" width="800" height="42" fill="#2d4a1e"/>
+      <rect x="0" y="174" width="800" height="4" fill="#3d6a28"/>
+      <!-- Ground tiles -->
+      <rect x="0" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="32" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="64" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="96" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="128" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="160" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="192" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="224" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="256" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="288" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="320" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="352" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="384" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="416" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="448" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="480" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="512" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="544" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="576" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="608" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="640" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="672" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="704" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="736" y="178" width="16" height="4" fill="#344d20"/>
+      <rect x="768" y="178" width="16" height="4" fill="#344d20"/>
+
+      <!-- Trees left -->
+      <rect x="30" y="158" width="8" height="20" fill="#6b3a1f"/>
+      <rect x="18" y="130" width="32" height="32" fill="#2d5a1e"/>
+      <rect x="22" y="118" width="24" height="16" fill="#3d7a28"/>
+
+      <rect x="80" y="162" width="8" height="16" fill="#6b3a1f"/>
+      <rect x="70" y="138" width="28" height="28" fill="#2d5a1e"/>
+      <rect x="74" y="128" width="20" height="14" fill="#3d7a28"/>
+
+      <!-- Hero character (pixel art) left side -->
+      <!-- Head -->
+      <rect x="145" y="126" width="20" height="20" fill="#f4a460"/>
+      <!-- Hair -->
+      <rect x="145" y="122" width="20" height="8" fill="#4a2800"/>
+      <rect x="141" y="126" width="4" height="8" fill="#4a2800"/>
+      <!-- Eyes -->
+      <rect x="149" y="132" width="4" height="4" fill="#1a1a1a"/>
+      <rect x="157" y="132" width="4" height="4" fill="#1a1a1a"/>
+      <!-- Body - armor -->
+      <rect x="143" y="146" width="24" height="20" fill="#1a3a8f"/>
+      <rect x="147" y="148" width="16" height="4" fill="#2a5abf"/>
+      <!-- Sword -->
+      <rect x="167" y="130" width="4" height="32" fill="#c0c0c0"/>
+      <rect x="163" y="140" width="12" height="4" fill="#c0a000"/>
+      <rect x="167" y="126" width="4" height="6" fill="#ffd700"/>
+      <!-- Shield -->
+      <rect x="131" y="142" width="12" height="16" fill="#1a3a8f"/>
+      <rect x="133" y="144" width="8" height="12" fill="#2a5abf"/>
+      <rect x="135" y="148" width="4" height="4" fill="#ffd700"/>
+      <!-- Legs -->
+      <rect x="143" y="166" width="10" height="14" fill="#0d2060"/>
+      <rect x="157" y="166" width="10" height="14" fill="#0d2060"/>
+      <!-- Boots -->
+      <rect x="141" y="178" width="12" height="4" fill="#3a1a00"/>
+      <rect x="155" y="178" width="12" height="4" fill="#3a1a00"/>
+
+      <!-- Nexus Crystal center -->
+      <rect x="387" y="148" width="26" height="4" fill="#00ffff"/>
+      <rect x="391" y="144" width="18" height="4" fill="#00ffff"/>
+      <rect x="395" y="140" width="10" height="4" fill="#00ffff"/>
+      <rect x="391" y="152" width="18" height="4" fill="#00e5e5"/>
+      <rect x="385" y="156" width="30" height="4" fill="#00d0d0"/>
+      <rect x="389" y="160" width="22" height="4" fill="#00b0b0"/>
+      <rect x="393" y="164" width="14" height="4" fill="#009090"/>
+      <!-- Crystal glow -->
+      <rect x="381" y="148" width="6" height="4" fill="#00ffff" opacity="0.3"/>
+      <rect x="413" y="148" width="6" height="4" fill="#00ffff" opacity="0.3"/>
+
+      <!-- Monster companion (pixel slime/creature) -->
+      <rect x="240" y="158" width="32" height="20" fill="#a855f7"/>
+      <rect x="236" y="154" width="40" height="8" fill="#a855f7"/>
+      <rect x="244" y="150" width="24" height="4" fill="#c084fc"/>
+      <!-- Eyes -->
+      <rect x="244" y="158" width="6" height="6" fill="white"/>
+      <rect x="262" y="158" width="6" height="6" fill="white"/>
+      <rect x="246" y="160" width="4" height="4" fill="#1a1a1a"/>
+      <rect x="264" y="160" width="4" height="4" fill="#1a1a1a"/>
+      <!-- Feet -->
+      <rect x="240" y="178" width="8" height="4" fill="#8b3fd4"/>
+      <rect x="252" y="178" width="8" height="4" fill="#8b3fd4"/>
+      <rect x="264" y="178" width="8" height="4" fill="#8b3fd4"/>
+
+      <!-- Dungeon/Castle right side -->
+      <!-- Main tower -->
+      <rect x="620" y="100" width="60" height="80" fill="#3a2060"/>
+      <rect x="624" y="104" width="52" height="72" fill="#2a1550"/>
+      <!-- Tower windows -->
+      <rect x="636" y="116" width="12" height="16" fill="#ffd700" opacity="0.9"/>
+      <rect x="652" y="116" width="12" height="16" fill="#ffd700" opacity="0.9"/>
+      <!-- Battlements -->
+      <rect x="616" y="88" width="12" height="16" fill="#3a2060"/>
+      <rect x="632" y="88" width="12" height="16" fill="#3a2060"/>
+      <rect x="648" y="88" width="12" height="16" fill="#3a2060"/>
+      <rect x="664" y="88" width="12" height="16" fill="#3a2060"/>
+      <!-- Door -->
+      <rect x="634" y="148" width="32" height="32" fill="#1a0a3e"/>
+      <rect x="638" y="148" width="24" height="8" fill="#2a1550"/>
+      <!-- Door arch -->
+      <rect x="634" y="140" width="32" height="12" fill="#3a2060"/>
+      <rect x="638" y="136" width="24" height="8" fill="#3a2060"/>
+      <rect x="646" y="132" width="8" height="8" fill="#3a2060"/>
+      <!-- Side tower -->
+      <rect x="580" y="130" width="40" height="50" fill="#3a2060"/>
+      <rect x="576" y="118" width="8" height="16" fill="#3a2060"/>
+      <rect x="588" y="118" width="8" height="16" fill="#3a2060"/>
+      <rect x="600" y="118" width="8" height="16" fill="#3a2060"/>
+      <rect x="588" y="140" width="12" height="14" fill="#ffd700" opacity="0.7"/>
+
+      <!-- Trees right -->
+      <rect x="710" y="154" width="8" height="24" fill="#6b3a1f"/>
+      <rect x="698" y="126" width="32" height="32" fill="#2d5a1e"/>
+      <rect x="702" y="114" width="24" height="16" fill="#3d7a28"/>
+
+      <rect x="756" y="160" width="8" height="18" fill="#6b3a1f"/>
+      <rect x="744" y="136" width="28" height="28" fill="#2d5a1e"/>
+      <rect x="748" y="124" width="20" height="16" fill="#3d7a28"/>
+
+      <!-- Stars/particles -->
+      <rect x="200" y="20" width="4" height="4" fill="#ffd700"/>
+      <rect x="350" y="12" width="4" height="4" fill="#ffd700"/>
+      <rect x="450" y="28" width="4" height="4" fill="#c084fc"/>
+      <rect x="550" y="15" width="4" height="4" fill="#00ffff"/>
+      <rect x="250" y="40" width="2" height="2" fill="white"/>
+      <rect x="320" y="30" width="2" height="2" fill="white"/>
+      <rect x="480" y="18" width="2" height="2" fill="white"/>
+    </svg>
+  </div>
+
+  <!-- HUD Bar -->
+  <div class="hud-bar">
+    <div class="hud-item">
+      <div>
+        <div class="hud-label">HP</div>
+        <div class="hp-bar"><div class="hp-fill"></div></div>
+      </div>
+    </div>
+    <div class="hud-item">
+      <div>
+        <div class="hud-label">XP</div>
+        <div class="xp-bar"><div class="xp-fill"></div></div>
+      </div>
+    </div>
+    <div class="badge">LVL 23</div>
+    <div class="hud-item" style="color:#ffd700; font-size:7px;">
+      ⚔ SOLO DEV
+    </div>
+    <div class="hud-item" style="color:#00ffff; font-size:7px;">
+      💎 50G
+    </div>
+    <div class="hud-item" style="color:#c084fc; font-size:7px;">
+      MOONFORGE
+    </div>
+  </div>
+
+  <!-- Items row -->
+  <div class="items-row">
+    <div class="item-slot epic">⚔️<div class="item-label">épée</div></div>
+    <div class="item-slot rare">🛡️<div class="item-label">bouclier</div></div>
+    <div class="item-slot epic">💎<div class="item-label">nexus</div></div>
+    <div class="item-slot">🪓<div class="item-label">craft</div></div>
+    <div class="item-slot">🧪<div class="item-label">potion</div></div>
+    <div class="item-slot rare">👾<div class="item-label">compagnon</div></div>
+    <div class="item-slot">⛏️<div class="item-label">mine</div></div>
+    <div class="item-slot epic" style="position:relative;">
+      <span style="font-family:'Press Start 2P';font-size:9px;color:#ffd700;">50G</span>
+      <div class="item-label">cadeau</div>
+    </div>
+  </div>
+
+  <!-- Text zone -->
+  <div class="text-zone">
+    <div class="greeting">✦ JOYEUX ANNIVERSAIRE JO ! ✦</div>
+
+    <div class="text-body">
+      <p>Pour tes <span class="highlight">23 ans</span>, le protocole est simple : ta mère a été mandatée pour la <span class="cyan">logistique</span>, moi j'ai fourni les <span class="highlight">fonds</span>. Budget alloué : <span class="highlight">50G</span>. Le reste, c'est toi.</p>
+
+      <p>Dépense <span class="green">intelligemment</span>. Ou pas. T'as 23 ans, fais ce que tu veux — du moment que c'est <span class="cyan">utile</span>, <span class="purple">cool</span>, ou idéalement les deux.</p>
+
+      <div class="dialogue-box">
+        <div class="dialogue-speaker">[ MESSAGE SYSTÈME ]</div>
+        <div class="dialogue-text">L'argent est sur le compte. Le courage pour demander plus, lui, est <span style="color:#4ade80">gratuit</span>. Bonne chance quand même.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom strip -->
+  <div class="bottom-strip">
+    <div class="game-name">
+      <span>PIXEL CHRONICLES</span>
+      Online RPG • Loot, Craft & Co-op
+    </div>
+    <div class="age-badge">
+      <span class="num">23</span>
+      ANS
+    </div>
+    <div class="game-name" style="text-align:right;">
+      <span>MOONFORGE</span>
+      Jonathan Esquie<br>Solo Dev ✦ 2025
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
